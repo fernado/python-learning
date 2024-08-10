@@ -1,0 +1,8 @@
+{% if yes_check_result %}
+    {% for item in yes_check_result %}
+        {{ item }}
+        {% if not loop.last %}
+            ,
+        {% endif %}
+    {% endfor %}
+{% endif %}
