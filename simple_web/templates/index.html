@@ -6,3 +6,12 @@
         {% endif %}
     {% endfor %}
 {% endif %}
+<h3>==========</h3>
+{% if no_check_result %}
+    {% for item in no_check_result %}
+        {{ item }}
+        {% if not loop.last %}
+            ,
+        {% endif %}
+    {% endfor %}
+{% endif %}
