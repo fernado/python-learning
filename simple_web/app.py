@@ -27,9 +27,9 @@ template_str = """
 @app.route('/')
 def index():
     yes_check_result = ['item1', 'item2', 'item3']
-    no_check_result = ['item11', 'item12', 'item13', 'item14', 'item15']
-    # return render_template('index.html', yes_check_result=yes_check_result)
-    return render_template('index.html', yes_check_result=yes_check_result, no_check_result=no_check_result)
+    # no_check_result = ['item11', 'item12', 'item13', 'item14', 'item15']
+    return render_template('index.html', yes_check_result=yes_check_result)
+    # return render_template('index.html', yes_check_result=yes_check_result, no_check_result=no_check_result)
 
 
 
