@@ -1,36 +1,44 @@
+import logging
+
 import requests
 from lxml import etree
 import json
-import urllib.request
 from tqdm import tqdm
 
 
-def download_video(url: str, output_path: str):
+def download_video(param_url: str, output_path: str):
     # Send an HTTP GET request to the specified URL to start downloading the file
-    response = requests.get(url, stream=True)
+    l_response = requests.get(param_url, stream=True)
     # Get the total file size from the 'Content-Length' header
-    total_size = int(response.headers.get('content-length', 0))
+    if l_response.status_code == 200:
+        total_size = int(l_response.headers.get('content-length', 0))
 
-    # Open the output file in binary write mode
-    with open(output_path, 'wb') as file:
-        # Initialize the tqdm progress bar with the total file size
-        with tqdm(total=total_size, unit='B', unit_scale=True, desc=output_path) as pbar:
-            # Iterate over the response content in chunks
-            for data in response.iter_content(chunk_size=1024):
-                # Write each chunk to the file
-                file.write(data)
-                # Update the progress bar by the chunk size
-                pbar.update(len(data))
+        if total_size == 0:
+            logging.info('cant get the resources')
+            return
+        # Open the output file in binary write mode
+        with open(output_path, 'wb') as file:
+            # Initialize the tqdm progress bar with the total file size
+            with tqdm(total=total_size, unit='B', unit_scale=True, desc=output_path) as proccess_bar:
+                # Iterate over the response content in chunks
+                for data in l_response.iter_content(chunk_size=1024):
+                    # Write each chunk to the file
+                    file.write(data)
+                    # Update the progress bar by the chunk size
+                    proccess_bar.update(len(data))
 
 
 if __name__ == '__main__':
     # UA伪装
     head = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0",
         # 防盗链子
-        , "Referer": "https://www.bilibili.com/"
-        ,
-        "Cookie": "buvid3=4608D78B-F867-9D5F-5623-EA2D9073754400140infoc; b_nut=1717426502; buvid4=015C00B5-2E0A-94F5-B250-593E9371154800140-024060314-Nk4u6e80UEPHxtOn7PC/wA%3D%3D; rpdid=|(kJYuRJRm~0J'u~u~RkYmku; _uuid=6FE347C10-DD4D-71E9-71DD-84A3FBA5197158429infoc; buvid_fp=5cdaa505a6d71eac5b8c1748203dab93; SESSDATA=6a4aa385%2C1732979074%2C49911%2A61CjALY_L_mOQjoFv0ZYLOh2Um-1U0HO8tOZLnSDX6rfarJNDHUx4WEqJVY_3IunOeFukSVnctNDk5bFEwOXhsRURMcDA4OXhQRU5rNEdkOUtRODdTem9Ja3A4NEs3UElSb25IVjJadDY3dDRxRDdRUGkyd3NDVUphUG5UOS1qU0JFY2I4RGF3UEhnIIEC; bili_jct=154210ab80cf68180900175817abcdeb; DedeUserID=453353235; DedeUserID__ckMd5=49714595c203cd9e; sid=8j2v4hii; is-2022-channel=1; CURRENT_BLACKGAP=0; enable_web_push=DISABLE; header_theme_version=CLOSE; CURRENT_QUALITY=80; CURRENT_FNVAL=4048; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjQzMTc4MjEsImlhdCI6MTcyNDA1ODU2MSwicGx0IjotMX0.2LJ7vHaBSWUDdrhNrNCXbiZZwdLi11cGKeTYj6ywkwg; bili_ticket_expires=1724317761; bp_t_offset_453353235=967370829996228608; bsource=search_baidu; home_feed_column=4; browser_resolution=1280-710; bmg_af_switch=1; bmg_src_def_domain=i0.hdslb.com; b_lsid=B7C18383_1916ADF2AE7"
+        "Referer": "https://www.bilibili.com/",
+        "Cookie": "buvid3=4608D78B-F867-9D5F-5623-EA2D9073754400140infoc; b_nut=1717426502; \
+        buvid4=015C00B5-2E0A-94F5-B250-593E9371154800140-024060314-Nk4u6e80UEPHxtOn7PC/wA%3D%3D; \
+        rpdid=|(kJYuRJRm~0J'u~u~RkYmku; _uuid=6FE347C10-DD4D-71E9-71DD-84A3FBA5197158429infoc; \
+        buvid_fp=5cdaa505a6d71eac5b8c1748203dab93; \
+        SESSDATA=6a4aa385%2C1732979074%2C49911%2A61CjALY_L_mOQjoFv0ZYLOh2Um-1U0HO8tOZLnSDX6rfarJNDHUx4WEqJVY_3IunOeFukSVnctNDk5bFEwOXhsRURMcDA4OXhQRU5rNEdkOUtRODdTem9Ja3A4NEs3UElSb25IVjJadDY3dDRxRDdRUGkyd3NDVUphUG5UOS1qU0JFY2I4RGF3UEhnIIEC; bili_jct=154210ab80cf68180900175817abcdeb; DedeUserID=453353235; DedeUserID__ckMd5=49714595c203cd9e; sid=8j2v4hii; is-2022-channel=1; CURRENT_BLACKGAP=0; enable_web_push=DISABLE; header_theme_version=CLOSE; CURRENT_QUALITY=80; CURRENT_FNVAL=4048; bili_ticket=eyJhbGciOiJIUzI1NiIsImtpZCI6InMwMyIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjQzMTc4MjEsImlhdCI6MTcyNDA1ODU2MSwicGx0IjotMX0.2LJ7vHaBSWUDdrhNrNCXbiZZwdLi11cGKeTYj6ywkwg; bili_ticket_expires=1724317761; bp_t_offset_453353235=967370829996228608; bsource=search_baidu; home_feed_column=4; browser_resolution=1280-710; bmg_af_switch=1; bmg_src_def_domain=i0.hdslb.com; b_lsid=B7C18383_1916ADF2AE7"
     }
 
     # 1、指定url
