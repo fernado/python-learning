@@ -21,3 +21,30 @@
 ```
 例如：pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pyspider，这样就会从清华这边的镜像去安装pyspider库。
 ```
+
+
+pycharm cmder setting
+
+`Settings -> Tools -> Terminal -> Shell path`
+```
+"cmd.exe" /k ""%CMDER_HOME%\vendor\init.bat"" 
+```
+
+
+`pdf2png_fitz.py` only install
+```
+pip install PyMuPDF
+```
+
+but `pdf2png_wand.py` must
+```
+pip install Wand
+```
+and [Ghostscript](https://www.ghostscript.com/releases/index.html)
+
+otherwise an exception would be throwed
+```
+wand.exceptions.DelegateError: FailedToExecuteCommand "gswin64c.exe" -q ...
+```
+
+
