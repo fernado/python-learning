@@ -1,0 +1,1 @@
+https://docs.locust.io/en/stable/writing-a-locustfile.html#client-attribute-httpsession

@@ -35,6 +35,9 @@ pycharm cmder setting
 ```
 pip install PyMuPDF
 ```
+and can change the dpi to adjust the resolution
+
+
 
 but `pdf2png_wand.py` must
 ```
@@ -42,7 +45,7 @@ pip install Wand
 ```
 and [Ghostscript](https://www.ghostscript.com/releases/index.html)
 
-otherwise an exception would be throwed
+otherwise an exception would be thrown
 ```
 wand.exceptions.DelegateError: FailedToExecuteCommand "gswin64c.exe" -q ...
 ```
